@@ -1,4 +1,4 @@
-const CS_CONSOLE_CHARACTER_LIMIT = 500
+const CS_CONSOLE_CHARACTER_LIMIT = 255
 
 document.getElementById("char-limit").value = CS_CONSOLE_CHARACTER_LIMIT
 
