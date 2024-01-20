@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS cfg to One Liners</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <style>
+      .command-block {
+        display: flex;
+        align-items: center;
+        background-color: rgb(243, 241, 241);
+        padding: 5px 10px;
+        margin-bottom: 10px;
+      }
+
+      ul {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main style="max-width: 720px; margin: auto">
+      <h1 style="text-align: center">CS cfg Converter</h1>
+
+      <h2>
+        Convert Counter-Strike cfg to one liners so that it can be inserted
+        without an actual cfg file.
+      </h2>
+      <p>
+        This is useful when you don't have access to the machine file system.
+        (e.g. playing from an Internet Cafe)
+      </p>
+      <p>
+        Just paste your cfg file content below and start copy pasting to CS
+        console.
+      </p>
+
+      <section style="display: flex">
+        <section style="flex: 1">
+          <textarea
+            id="cs-cfg"
+            style="width: 100%; height: 400px; resize: none"
+            onchange="convertToOneLiners()"
+          ></textarea>
+        </section>
+
+        <section style="flex: 1">
+          <ul id="command-list">
+            <!-- Command list will go here -->
+          </ul>
+        </section>
+      </section>
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
