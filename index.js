@@ -1,11 +1,49 @@
-const COMMANDS_PER_BLOCK = 10
+const CS_CONSOLE_CHARACTER_LIMIT = 500
+
+document.getElementById("char-limit").value = CS_CONSOLE_CHARACTER_LIMIT
 
 function copyToClipboard (text) {
   navigator.clipboard.writeText(text)
 }
 
+function renderCodeBlock (line) {
+  const commandList = document.getElementById("command-list")
+
+  const commandBlock = document.createElement('li')
+  commandBlock.classList.add('command-block')
+
+  const commandDiv = document.createElement('div')
+  commandDiv.style.flex = 1
+  commandDiv.appendChild(
+    document.createTextNode(line)
+  )
+
+  commandBlock.appendChild(commandDiv)
+
+  const copyButton = document.createElement('button')
+  copyButton.innerText = 'Copy'
+  copyButton.addEventListener('click', () => {
+    commandBlock.style['background-color'] = '#4CAF50'
+    copyToClipboard(line)
+  })
+
+  commandBlock.appendChild(
+    document.createElement('div').appendChild(copyButton)
+  )
+
+  commandList.appendChild(commandBlock)
+}
+
 function convertToOneLiners () {
   const cfg = document.getElementById('cs-cfg').value
+
+  // Remove old code blocks
+  const commandList = document.getElementById("command-list")
+  commandList.innerHTML = ""
+
+  if (!cfg) {
+    return
+  }
 
   const cfgLines = cfg
     .replace(/\/\/.*/g, '') // remove comments
@@ -13,44 +51,18 @@ function convertToOneLiners () {
     .filter(line => line) // remove empty lines
     .map(line => line.trim()) // remove spaces
 
-  const commandList = document.getElementById("command-list")
-  commandList.innerHtml = ""
+  const charLimit = document.getElementById("char-limit").value
 
-  for (let i = 0; i < cfgLines.length / COMMANDS_PER_BLOCK; i++) {
-    let line = ""
+  let line = ""
+  for (let i = 0; i < cfgLines.length + 1; i++) {
+    if (!cfgLines[i] || (line + cfgLines[i] + "; ").length > charLimit) {
+      renderCodeBlock(line)
 
-    for (let j = 0; j < COMMANDS_PER_BLOCK; j++) {
-      const index = i * COMMANDS_PER_BLOCK + j
-
-      if (!cfgLines[index]) {
-        break
+      if (cfgLines[i]) {
+        line = cfgLines[i] + "; "
       }
-
-      line += cfgLines[index] + "; "
+    } else {
+      line += cfgLines[i] + "; "
     }
-
-    const commandBlock = document.createElement('li')
-    commandBlock.classList.add('command-block')
-
-    const commandDiv = document.createElement('div')
-    commandDiv.style.flex = 1
-    commandDiv.appendChild(
-      document.createTextNode(line)
-    )
-
-    commandBlock.appendChild(commandDiv)
-
-    const copyButton = document.createElement('button')
-    copyButton.innerText = 'Copy'
-    copyButton.addEventListener('click', () => {
-      commandBlock.style['background-color'] = '#4CAF50'
-      copyToClipboard(line)
-    })
-
-    commandBlock.appendChild(
-      document.createElement('div').appendChild(copyButton)
-    )
-
-    commandList.appendChild(commandBlock)
   }
 }
